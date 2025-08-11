@@ -272,42 +272,40 @@ exports.getTopIssues = getTopIssues;
  * @param labelColour The colour of the label.
  */
 const initLabel = (owner, repo, label, labelColour, labelDescription) => __awaiter(void 0, void 0, void 0, function* () {
-    return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const currentLabels = yield utils_1.octokit.rest.issues.listLabelsForRepo({
+    const bareColour = labelColour.replace('#', '');
+    try {
+        const { data: existing } = yield utils_1.octokit.rest.issues.getLabel({
+            owner,
+            repo,
+            name: label,
+        });
+        // if we get here, the labale exists - update it if necessary
+        if (existing.description !== labelDescription || existing.color !== bareColour) {
+            yield utils_1.octokit.rest.issues.updateLabel({
                 owner,
-                repo
+                repo,
+                name: label,
+                color: bareColour,
+                description: labelDescription,
             });
-            const currentLabel = currentLabels.data.find(({ name: labelName }) => labelName === label);
-            // Create label if it doesn't exist and update it if it does.
-            const topIssueLabelColourBare = labelColour.replace('#', '');
-            if (!currentLabel) {
-                yield utils_1.octokit.rest.issues.createLabel({
-                    owner,
-                    repo,
-                    name: label,
-                    color: topIssueLabelColourBare,
-                    description: labelDescription
-                });
-            }
-            else {
-                if (currentLabel.description !== labelDescription ||
-                    currentLabel.color !== topIssueLabelColourBare) {
-                    yield utils_1.octokit.rest.issues.updateLabel({
-                        owner,
-                        repo,
-                        name: label,
-                        color: topIssueLabelColourBare,
-                        description: labelDescription
-                    });
-                }
-            }
-            resolve();
         }
-        catch (error) {
-            reject(error);
+    }
+    catch (err) {
+        // 404 means label is missing - create it
+        if ((err === null || err === void 0 ? void 0 : err.status) === 404) {
+            yield utils_1.octokit.rest.issues.createLabel({
+                owner,
+                repo,
+                name: label,
+                color: bareColour,
+                description: labelDescription,
+            });
         }
-    }));
+        else {
+            // any other error, re-throw
+            throw err;
+        }
+    }
 });
 exports.initLabel = initLabel;
 /**

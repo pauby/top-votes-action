@@ -337,46 +337,42 @@ export const initLabel = async (
   labelColour: string,
   labelDescription: string
 ): Promise<void> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const currentLabels = await octokit.rest.issues.listLabelsForRepo({
-        owner,
-        repo
-      })
-      const currentLabel = currentLabels.data.find(
-        ({name: labelName}) => labelName === label
-      )
+  const bareColour = labelColour.replace('#', '');
 
-      // Create label if it doesn't exist and update it if it does.
-      const topIssueLabelColourBare = labelColour.replace('#', '')
-      if (!currentLabel) {
-        await octokit.rest.issues.createLabel({
-          owner,
-          repo,
-          name: label,
-          color: topIssueLabelColourBare,
-          description: labelDescription
-        })
-      } else {
-        if (
-          currentLabel.description !== labelDescription ||
-          currentLabel.color !== topIssueLabelColourBare
-        ) {
-          await octokit.rest.issues.updateLabel({
-            owner,
-            repo,
-            name: label,
-            color: topIssueLabelColourBare,
-            description: labelDescription
-          })
-        }
-      }
-      resolve()
-    } catch (error) {
-      reject(error)
+  try {
+    const { data: existing} = await octokit.rest.issues.getLabel({
+      owner,
+      repo,
+      name: label,
+    });
+
+    // if we get here, the labale exists - update it if necessary
+    if ( existing.description !== labelDescription || existing.color !== bareColour ) {
+      await octokit.rest.issues.updateLabel ({
+        owner,
+        repo,
+        name: label,
+        color: bareColour,
+        description: labelDescription,
+      });
     }
-  })
-}
+  }
+  catch (err: any) {
+    // 404 means label is missing - create it
+    if (err?.status === 404) {
+      await octokit.rest.issues.createLabel({
+        owner,
+        repo,
+        name: label,
+        color: bareColour,
+        description: labelDescription,
+      });
+    } else {
+      // any other error, re-throw
+      throw err
+    }
+  }
+};
 
 /**
  * Add a label to an issue.
