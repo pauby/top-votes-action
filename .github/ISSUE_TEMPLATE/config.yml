@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
   - name: Question
-    url: https://github.com/rickstaa/top-issues-action/discussions
+    url: https://github.com/pauby/top-votes-action/discussions
     about: Please ask and answer questions here.

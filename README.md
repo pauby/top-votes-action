@@ -1,8 +1,7 @@
-<p align="center">
-  <a href="https://github.com/rickstaa/top-issues-action/actions"><img alt="typescript-action status" src="https://github.com/rickstaa/top-issues-action/workflows/build-test/badge.svg"></a>
-</p>
+# 👍 Top Votes GitHub Action
 
-# 👍 Top Issues GitHub Action
+> [!IMPORTANT]
+> Thsi project is a fork of [top-issues-action](https://github.com/rickstaa/top-issues-action). All credit for the idea goes to Rick Staa. Documentation will be updated as necessary.
 
 A [GitHub Action](https://github.com/features/actions) that labels and displays the top-upvoted (i.e. 👍) issues and pull requests in your repository. It currently can:
 
@@ -99,10 +98,10 @@ This action currently does not have any outputs.
 
 ### Examples workflow - Create Dashboard and label top issues, bugs, features and pull requests
 
-The following example uses the [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule) event to run the top-issues-action every day at 12:00 AM with all features enabled.
+The following example uses the [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule) event to run the top-votes-action every day at 12:00 AM with all features enabled.
 
 ```yaml
-name: Top issues action.
+name: Top votes action.
 on:
   schedule:
     - cron: '0 0 */1 * *'
@@ -113,7 +112,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run top issues action
-        uses: rickstaa/top-issues-action@v1
+        uses: pauby/top-votes-action@v1
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
         with:
