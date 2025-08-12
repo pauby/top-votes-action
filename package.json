@@ -1,5 +1,5 @@
 {
-  "name": "top-issues-action",
+  "name": "top-votes-action",
   "version": "0.0.0",
   "private": true,
   "description": "Labels and displays the top-upvoted (i.e. +1) issues and pull requests in your repository.",
@@ -28,7 +28,7 @@
     "continuous-integration",
     "productivity"
   ],
-  "author": "Rick Staa",
+  "author": "Paul Broadwith",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.10.0",
