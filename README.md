@@ -1,7 +1,7 @@
 # 👍 Top Votes GitHub Action
 
 > [!IMPORTANT]
-> Thsi project is a fork of [top-issues-action](https://github.com/rickstaa/top-issues-action). All credit for the idea goes to Rick Staa. Documentation will be updated as necessary.
+> This project is a fork of [top-issues-action](https://github.com/rickstaa/top-issues-action). All credit for the idea goes to Rick Staa. Documentation will be updated as necessary.
 
 A [GitHub Action](https://github.com/features/actions) that labels and displays the top-upvoted (i.e. 👍) issues and pull requests in your repository. It currently can:
 
